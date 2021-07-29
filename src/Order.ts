@@ -1,25 +1,23 @@
-const Cpf = require("./Cpf");
+import Cpf from "./Cpf";
+import OrderItem from "./OrderItem";
+export default class Order {
+    cpf: Cpf;
+    items: OrderItem[];
 
-function creatOrder(nuCpf) {
-    if (!Cpf.validate(nuCpf)) return false;
-    
-    // 1 - Não deve fazer um pedido com cpf inválido - OK
-    // 2 - Deve fazer um pedido com 3 itens (com descrição, preço e quantidade)
-    // 3 - Deve fazer um pedido com cupom de desconto (percentual sobre o total do pedido)
+    constructor (cpf: string) {
+        this.cpf = new Cpf(cpf);
+        this.items = [];
+    }
 
-    return true; 
-}
-module.exports = {
-    creatOrder
-};
+    addItem(description: string, price: number, quantity: number) {
+        this.items.push(new OrderItem(description, price, quantity));
+    }
 
-class Order {
-    id : number;
-    quantity : number;
-    totalValue : number;
-
-    constructor( quantity : number) {
-        this.id += 1;
-        this.quantity = quantity;
+    getTotal() {
+        let total = 0;
+        for (const orderItem of this.items) {
+            total += orderItem.getTotal();
+        }
+        return total;
     }
 }

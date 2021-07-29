@@ -1,9 +1,16 @@
-const order = require("./Order");
+import Order from "./Order";
 
-test("Should be false - do not create a new order to invalid cpf", function () {
-    expect(order.creatOrder("00000000000")).toBeFalsy();
+test("Do not create a new order with invalid cpf", function () {
+    const cpf = "111.111.111.-11";
+    expect(() => new Order(cpf)).toThrow(new Error("Invalid CPF"));
 });
 
-test("Should be true - create a new order to valid cpf", function () {
-    expect(order.creatOrder("864.464.227-84")).toBeTruthy();
+test("Should be create a new order using a valid cpf and 3 itens", function () {
+    const cpf = "864.464.227-84";
+    const order = new Order(cpf);
+    order.addItem("Guitarra", 1000, 2);
+    order.addItem("Amplficador", 5000, 1);
+    order.addItem("Cabo", 30, 3);
+    const total = order.getTotal();
+    expect(total).toBe(7090);
 });
